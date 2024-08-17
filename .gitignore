@@ -1,0 +1,89 @@
+# Kotlin specific
+*.class
+*.kt~
+*.kts~
+*.log
+
+# IntelliJ IDEA specific
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+target/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*.db
+
+# Gradle specific
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/application.yml
+!**/src/main/**/application.yaml
+!**/src/main/**/application.properties
+!**/src/test/**/application.yml
+!**/src/test/**/application.yaml
+!**/src/test/**/application.properties
+
+# Gradle Wrapper
+gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-wrapper.jar
+
+# Project specific
+*.log
+*.cache
+*.tmp
+*.swp
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+desktop.ini
+
+# MySQL specific
+*.sql
+
+# Application specific
+/logs
+*.log
+*.pid
+*.seed
+
+# Spring Boot specific
+/target/
+!/target/classes/
+!/target/test-classes/
+/.mvn/
+!/.mvn/wrapper/maven-wrapper.properties
+/.gradle/
+/build/
+
+# Test specific
+/test-outputs/
+
+# Maven specific
+target/
+
+# Exclude all application-specific configuration files
+application.yml
+application.yaml
+application-*.yml
+application-*.yaml
+application.properties
+application-*.properties
+
+# Eclipse specific
+.project
+.classpath
+.settings/
+.apt_generated/
+.factorypath
+
+# Visual Studio Code specific
+.vscode/
