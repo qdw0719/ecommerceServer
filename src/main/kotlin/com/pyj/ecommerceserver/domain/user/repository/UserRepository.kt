@@ -6,8 +6,6 @@ import com.pyj.ecommerceserver.domain.user.UserLoginHistory
 interface UserRepository {
     fun findUser(userCode: String): User?
 
-    fun regist(user: User): User
-
     fun save(user: User): User
 
     fun findUserByEmail(userEmail: String): User?

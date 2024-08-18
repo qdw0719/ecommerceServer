@@ -15,10 +15,6 @@ class UserRepositoryImpl(
         return userJpaRepository.findByUserCode(userCode)
     }
 
-    override fun regist(user: User): User {
-        return userJpaRepository.save(user)
-    }
-
     override fun save(user: User): User {
         return userJpaRepository.save(user)
     }

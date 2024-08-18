@@ -21,7 +21,7 @@ class UserService (
 ) {
     fun regist(command: UserCommand.Regist): User{
         val user = User.create(command.userEmail, command.userPassword, command.nickname)
-        return userRepository.regist(user)
+        return userRepository.save(user)
     }
 
     fun login(email: String, password: String): User {
@@ -68,9 +68,17 @@ class UserService (
         return userRepository.save(user)
     }
 
+    @Transactional
     fun userToSeller(userCode: String) {
         val user = userRepository.findUser(userCode)?: throw RuntimeException("해당하는 유저가 존재하지 않습니다.: $userCode")
         user.updateUserToSeller()
+        userRepository.save(user)
+    }
+
+    @Transactional
+    fun sellerToUser(userCode: String) {
+        val user = userRepository.findUser(userCode)?: throw RuntimeException("해당하는 유저가 존재하지 않습니다.: $userCode")
+        user.updateSellerToUser()
         userRepository.save(user)
     }
 }

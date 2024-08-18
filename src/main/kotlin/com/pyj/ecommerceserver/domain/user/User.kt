@@ -20,7 +20,7 @@ data class User(
     var nickname: String,
     var lastLoginTime: LocalDateTime?,
     @Enumerated(EnumType.STRING)
-    var type: UserType,
+    var userType: UserType,
     @Enumerated(EnumType.STRING)
     var validState: ValidState,
     var invalidDate: LocalDateTime?,
@@ -57,7 +57,7 @@ data class User(
                 userPassword = userPassword,
                 nickname = nickname,
                 lastLoginTime = null,
-                type = UserType.Noraml,
+                userType = UserType.Normal,
                 validState = ValidState.Valid,
                 invalidDate = null,
                 createdAt = LocalDateTime.now(),
@@ -96,11 +96,11 @@ data class User(
     }
 
     fun updateUserToSeller() {
-        type = UserType.Seller
+        userType = UserType.Seller
     }
 
     fun updateSellerToUser() {
-        type = UserType.Noraml
+        userType = UserType.Normal
     }
 
     // todo::
