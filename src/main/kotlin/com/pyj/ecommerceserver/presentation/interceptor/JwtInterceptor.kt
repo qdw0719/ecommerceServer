@@ -11,15 +11,7 @@ class JwtInterceptor: HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         val token = request.getParameter("token")
-        if (token.isNullOrEmpty()) {
-            throw RuntimeException("토큰이 없습니다.")
-        }
-
-        try {
-            JwtUtil.validateToken(token)
-        } catch (e: RuntimeException) {
-            throw RuntimeException(e.message)
-        }
+        JwtUtil.validateToken(token)
         return true
     }
 }

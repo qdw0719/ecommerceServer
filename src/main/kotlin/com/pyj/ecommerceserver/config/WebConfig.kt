@@ -13,6 +13,6 @@ class WebConfig(
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(jwtInterceptor)
-            .addPathPatterns("/api/users/auth/reset-password")
+                .addPathPatterns("/api/users/auth/reset-password")
     }
 }

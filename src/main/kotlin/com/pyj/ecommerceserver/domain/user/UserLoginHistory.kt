@@ -1,6 +1,5 @@
 package com.pyj.ecommerceserver.domain.user
 
-import com.pyj.ecommerceserver.domain.common.ValidState
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType

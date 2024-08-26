@@ -54,7 +54,6 @@ class UserService (
     fun changeUserPassword(command: UserCommand.ChangeUserPassword): User {
         val user = userRepository.findUser(command.userCode)?: throw RuntimeException("해당하는 유저가 존재하지 않습니다.: $command.userCode")
         user.userValidation(user)
-        user.passwordValidation(command.checkPassword)
         user.updatePassword(command.newPassword)
         return userRepository.save(user)
     }

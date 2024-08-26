@@ -9,8 +9,8 @@ class UserCommand {
 
     data class ChangeUserPassword (
         val userCode: String,
-        val checkPassword: String,
-        val newPassword: String
+        val checkPassword: String? = "",
+        val newPassword: String,
     )
 
     data class UserInfo(

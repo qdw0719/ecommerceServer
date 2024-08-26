@@ -1,6 +1,6 @@
 package com.pyj.ecommerceserver.domain.user
 
-import com.pyj.ecommerceserver.domain.common.ValidState
+import com.pyj.ecommerceserver.domain.common.enums.ValidState
 import com.pyj.ecommerceserver.domain.user.converter.PasswordEncryptorConverter
 import jakarta.persistence.*
 import org.springframework.security.core.GrantedAuthority
@@ -103,6 +103,7 @@ data class User(
         userType = UserType.Normal
     }
 
-    // todo::
-    //      유저 탈퇴에 대한 내용 필요 (유저타입이 판매자라면 판매자정보도 invalid)
+    fun userInvalid() {
+        validState = ValidState.Invalid
+    }
 }

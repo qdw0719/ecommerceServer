@@ -1,4 +1,4 @@
-package com.pyj.ecommerceserver.infra.mail
+package com.pyj.ecommerceserver.domain.mailauth.service
 
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
@@ -9,7 +9,7 @@ class EmailService(
     private val javaMailSender: JavaMailSender
 ) {
 
-    fun sendVerificationCode(email: String, verificationCode: String) {
+    fun sendVerificationCode(userEmail: String, verificationCode: String) {
         val title = "e-commerce 인증번호"
         val content = StringBuilder()
         content.append("<div style='font-family: malgun gothic;'>")
@@ -25,7 +25,7 @@ class EmailService(
         val message = javaMailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "UTF-8")
 
-        helper.setTo(email)
+        helper.setTo(userEmail)
         helper.setSubject(title)
         helper.setText(content.toString(), true)
 
