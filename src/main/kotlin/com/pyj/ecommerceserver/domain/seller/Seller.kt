@@ -1,6 +1,6 @@
 package com.pyj.ecommerceserver.domain.seller
 
-import com.pyj.ecommerceserver.domain.common.ValidState
+import com.pyj.ecommerceserver.domain.common.enums.ValidState
 import jakarta.persistence.*
 import java.time.LocalDateTime
 

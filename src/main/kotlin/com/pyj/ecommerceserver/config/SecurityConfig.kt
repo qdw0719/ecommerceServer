@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
-class SecurityConfiguration(
+class SecurityConfig(
     private val customAuthenticationSuccessHandler: CustomAuthenticationSuccessHandler
 ) {
 
