@@ -79,4 +79,17 @@ class UserResponseDTO{
             }
         }
     }
+
+    data class ResetMessage(
+        val token: String,
+        val mesage: String = "인증번호가 이메일로 전송되었습니다."
+    ) {
+        companion object {
+            fun toResponse(token: String): ResetMessage {
+                return ResetMessage(
+                    token = token
+                )
+            }
+        }
+    }
 }

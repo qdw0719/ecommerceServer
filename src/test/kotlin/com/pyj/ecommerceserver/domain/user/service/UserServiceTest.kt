@@ -28,9 +28,9 @@ class UserServiceTest(
 
     @Test fun `회원가입 테스트`() {
         // given
-        val userEmail = "pyj19960719@gmail.com"
-        val userPassword = "admin"
-        val nickname = "admin-googleID"
+        val userEmail = "test123user"
+        val userPassword = "useruser"
+        val nickname = "My Name Is User"
 
         val command = UserCommand.Regist(userEmail, userPassword, nickname)
 
@@ -45,8 +45,10 @@ class UserServiceTest(
 
     @Test fun `비밀번호 변경 테스트`() {
         // given
-        val userCode = "2549dbe8-2eee-41bd-89f3-6f3a422b2ef9"
-        val userInfo = userService.findUserInfo(UserCommand.UserInfo(userCode))
+        val userEmail = "test123user"
+        val command = UserCommand.UserInfoByEmail(userEmail)
+        val userInfo = userService.findUserInfoByEmail(command)
+        val userCode = userInfo.userCode
         val newPassword = "test1234"
 
         // when
@@ -60,9 +62,11 @@ class UserServiceTest(
 
     @Test fun `닉네임 변경 테스트`() {
         // given
-        val userCode = "2549dbe8-2eee-41bd-89f3-6f3a422b2ef9"
-        val userInfo = userService.findUserInfo(UserCommand.UserInfo(userCode))
-        val newNickname = "TestUser123"
+        val userEmail = "test123user"
+        val command = UserCommand.UserInfoByEmail(userEmail)
+        val userInfo = userService.findUserInfoByEmail(command)
+        val userCode = userInfo.userCode
+        val newNickname = "user321test"
 
         // when
         userService.changeUserNickname(UserCommand.ChangeUserNickname(userInfo.userCode, userInfo.password, newNickname))

@@ -22,14 +22,14 @@ class MailAuthService(
 
     @Transactional
     fun saveUserAuthorize(command: MailAuthCommand.UserAuthInfo) {
-        val userAuthInfo = mailAuthorizeRepository.findUserAuthInfo(command.userCode, command.verificationCode)
+        val userAuthInfo = mailAuthorizeRepository.findUserAuthInfo(command.userCode)
             ?.apply { increaseSendCount() }
             ?: MailAuthorize.create(command.userCode, command.verificationCode, 1)
 
         mailAuthorizeRepository.save(userAuthInfo)
     }
 
-    fun findByUserAuthInfo(command: MailAuthCommand.UserAuthInfo): MailAuthorize {
-        return mailAuthorizeRepository.findByUserAuthInfo(command.userCode, command.type)
+    fun findByUserAuthInfo(command: MailAuthCommand.UserAuthInfo): MailAuthorize? {
+        return mailAuthorizeRepository.findUserAuthInfo(command.userCode)
     }
 }

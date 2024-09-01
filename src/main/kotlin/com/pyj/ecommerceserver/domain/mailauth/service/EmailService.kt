@@ -29,6 +29,11 @@ class EmailService(
         helper.setSubject(title)
         helper.setText(content.toString(), true)
 
-        javaMailSender.send(message)
+        try {
+            javaMailSender.send(message)
+        } catch(e: Exception) {
+            throw RuntimeException("메일전송에 실패했습니다. 다시 시도해주세요.", e)
+        }
+
     }
 }

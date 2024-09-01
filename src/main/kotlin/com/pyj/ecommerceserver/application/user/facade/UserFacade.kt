@@ -41,7 +41,7 @@ class UserFacade(
     fun resetPassword(token: String, inputVerificationCode: String, newPassword: String) {
         val userCode = JwtUtil.getUserCode(token)
         val userAuthInfo = MailAuthCommand.UserAuthInfo(userCode, inputVerificationCode, MailAuthType.PasswordReset)
-        val userMailAuthInfo = mailAuthService.findByUserAuthInfo(userAuthInfo)
+        val userMailAuthInfo = mailAuthService.findByUserAuthInfo(userAuthInfo)?: throw RuntimeException("해당하는 유저가 존재하지 않습니다.: $userCode")
         userMailAuthInfo.isValid()
 
         val storedVerificationCode = JwtUtil.getVerificationCode(token)

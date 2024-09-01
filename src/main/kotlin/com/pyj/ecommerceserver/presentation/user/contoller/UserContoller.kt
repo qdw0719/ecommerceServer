@@ -37,9 +37,10 @@ class UserContoller(
     }
 
     @PostMapping("/forgot-password")
-    fun forgotPassword(@RequestBody request: UserRequestDTO.UserInfoByEmail): ResponseEntity<String> {
-        userFacade.sendVertifyCode(request.toCommand())
-        return ResponseEntity.ok("인증번호가 이메일로 전송되었습니다.")
+    fun forgotPassword(@RequestBody request: UserRequestDTO.UserInfoByEmail): ResponseEntity<UserResponseDTO.ResetMessage> {
+        return ResponseEntity.ok(
+            UserResponseDTO.ResetMessage.toResponse(userFacade.sendVertifyCode(request.toCommand()))
+        )
     }
 
     @PostMapping("/auth/reset-password")

@@ -30,6 +30,10 @@ data class MailAuthorize(
         }
     }
 
+    @PostUpdate fun onUpdate() {
+        updatedAt = LocalDateTime.now()
+    }
+
     fun validate() {
         validState = ValidState.Valid
     }
