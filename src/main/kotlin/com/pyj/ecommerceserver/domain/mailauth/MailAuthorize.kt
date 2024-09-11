@@ -48,6 +48,12 @@ data class MailAuthorize(
         }
     }
 
+    fun verificationCodeValidate(inputVerificationCode: String) {
+        if (!verificationCode.equals(inputVerificationCode)) {
+            throw RuntimeException("인증번호가 일치하지 않습니다.")
+        }
+    }
+
     fun isValid() {
         if (validState != ValidState.Valid) {
             throw RuntimeException("인증번호가 유효하지 않습니다. 재발급 후 인증해주세요.")
@@ -56,6 +62,10 @@ data class MailAuthorize(
 
     fun increaseSendCount() {
         sendCount = sendCount + 1
+    }
+
+    fun expiredVerfify() {
+        validState = ValidState.Invalid
     }
 
     fun newVerificationCode(newVerificationCode: String) {

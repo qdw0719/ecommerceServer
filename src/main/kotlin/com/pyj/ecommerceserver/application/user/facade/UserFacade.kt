@@ -27,29 +27,23 @@ class UserFacade(
     fun sendVertifyCode(command: UserCommand.UserInfoByEmail): String {
         val user = userService.findUserInfoByEmail(command)
         val verificationCode = generateVerificationCode()
-        val jwtToken = JwtUtil.generateToken(user.userCode, verificationCode)
-
         emailService.sendVerificationCode(user.userEmail, verificationCode)
 
         val userAuthInfo = MailAuthCommand.UserAuthInfo(user.userCode, verificationCode, MailAuthType.PasswordReset)
         mailAuthService.saveUserAuthorize(userAuthInfo)
         mailAuthService.createHistory(userAuthInfo)
 
-        return jwtToken
+        return "인증번호가 전송되었습니다.";
     }
 
-    fun resetPassword(token: String, inputVerificationCode: String, newPassword: String) {
-        val userCode = JwtUtil.getUserCode(token)
-        val userAuthInfo = MailAuthCommand.UserAuthInfo(userCode, inputVerificationCode, MailAuthType.PasswordReset)
-        val userMailAuthInfo = mailAuthService.findByUserAuthInfo(userAuthInfo)?: throw RuntimeException("해당하는 유저가 존재하지 않습니다.: $userCode")
+    fun resetPassword(userEmail: String, inputVerificationCode: String, newPassword: String) {
+        val userInfo = userService.findUserInfoByEmail(UserCommand.UserInfoByEmail(userEmail))
+        val userAuthInfo = MailAuthCommand.UserAuthInfo(userInfo.userCode, inputVerificationCode, MailAuthType.PasswordReset)
+        val userMailAuthInfo = mailAuthService.findByUserAuthInfo(userAuthInfo)?: throw RuntimeException("해당하는 유저가 존재하지 않습니다.: $userInfo.userCode")
         userMailAuthInfo.isValid()
+        userMailAuthInfo.verificationCodeValidate(inputVerificationCode)
 
-        val storedVerificationCode = JwtUtil.getVerificationCode(token)
-        if (storedVerificationCode != inputVerificationCode) {
-            throw RuntimeException("인증번호가 일치하지 않습니다.")
-        }
-
-        val command = UserCommand.ChangeUserPassword(userCode = userCode, newPassword = newPassword)
+        val command = UserCommand.ChangeUserPassword(userCode = userInfo.userCode, newPassword = newPassword)
         userService.changeUserPassword(command)
     }
 

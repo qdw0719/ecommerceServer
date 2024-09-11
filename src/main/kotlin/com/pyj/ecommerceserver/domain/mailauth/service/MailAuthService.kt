@@ -23,9 +23,11 @@ class MailAuthService(
     @Transactional
     fun saveUserAuthorize(command: MailAuthCommand.UserAuthInfo) {
         val userAuthInfo = mailAuthorizeRepository.findUserAuthInfo(command.userCode)
-            ?.apply { increaseSendCount() }
+            ?.apply {
+                increaseSendCount()
+                verificationCode = command.verificationCode
+            }
             ?: MailAuthorize.create(command.userCode, command.verificationCode, 1)
-
         mailAuthorizeRepository.save(userAuthInfo)
     }
 

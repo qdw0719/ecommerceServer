@@ -44,8 +44,8 @@ class UserContoller(
     }
 
     @PostMapping("/auth/reset-password")
-    fun resetPassword(@RequestBody request: UserRequestDTO.ResetPassword): ResponseEntity<String> {
-        userFacade.resetPassword(request.token, request.verificationCode, request.newPassword)
+    fun resetPassword(@RequestBody request: UserRequestDTO.ResetPassword): ResponseEntity<String> { //@RequestHeader("Authorization") token: String,
+        userFacade.resetPassword(request.userEmail, request.verificationCode, request.newPassword)
         return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.")
     }
 

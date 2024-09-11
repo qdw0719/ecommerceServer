@@ -1,55 +1,61 @@
 package com.pyj.ecommerceserver.common.utils
 
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.ExpiredJwtException
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.security.Keys
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
+import com.auth0.jwt.exceptions.SignatureVerificationException
+import com.auth0.jwt.exceptions.TokenExpiredException
+import com.auth0.jwt.interfaces.DecodedJWT
 import java.util.*
 
 object JwtUtil {
 
-    private val SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-    private val EXPIRATION_TIME: Long = 5 * 60 * 1000 // 5분
+    private val SECRET_KEY = "your-secure-secret-key-which-is-at-least-256-bits-long"
+    private val ALGORITHM = Algorithm.HMAC256(SECRET_KEY)
 
     fun generateToken(userCode: String, verificationCode: String): String {
-        val claims = Jwts.claims().setSubject(userCode)
-        claims["verificationCode"] = verificationCode
-        val now = Date()
-
-        return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(now)
-            .setExpiration(Date(now.time + EXPIRATION_TIME))
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-            .compact()
+        return JWT.create()
+            .withSubject(userCode)
+            .withClaim("verificationCode", verificationCode)
+            .withIssuedAt(Date())
+            .withExpiresAt(Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5분 만료
+            .sign(ALGORITHM)
     }
 
-    fun validateToken(token: String) {
-        if (token.isNullOrEmpty()) {
-            throw RuntimeException("토큰이 없습니다.")
+    fun validateToken(token: String): Boolean {
+        return try {
+            val verifier = JWT.require(ALGORITHM).build()
+            verifier.verify(token) // 토큰 검증
+            true
+        } catch (e: JWTVerificationException) {
+            when (e) {
+                is TokenExpiredException -> {
+                    throw RuntimeException("토큰이 만료되었습니다.")
+                }
+                is SignatureVerificationException -> {
+                    throw RuntimeException("토큰 서명이 일치하지 않습니다.")
+                }
+                else -> {
+                    throw RuntimeException("유효하지 않은 토큰: ${e.message}")
+                }
+            }
+            false
         }
-        try {
-            val claims = getClaims(token)
-        } catch (e1: ExpiredJwtException) {
-            throw RuntimeException("인증시간이 초과되었습니다. 다시 시도해주세요.", e1)
-        } catch (e2: Exception) {
-            throw RuntimeException("유효하지 않은 토큰입니다.", e2)
-        }
+    }
+
+    fun extractClaims(token: String): DecodedJWT {
+        return JWT.require(ALGORITHM)
+            .build()
+            .verify(token)
     }
 
     fun getUserCode(token: String): String {
-        return getClaims(token).subject
+        val decodedJWT = extractClaims(token)
+        return decodedJWT.subject
     }
 
     fun getVerificationCode(token: String): String {
-        return getClaims(token)["verificationCode"] as String
-    }
-
-    private fun getClaims(token: String): Claims {
-        return Jwts.parser()
-            .setSigningKey(SECRET_KEY)
-            .parseClaimsJws(token)
-            .body
+        val decodedJWT = extractClaims(token)
+        return decodedJWT.getClaim("verificationCode").asString()
     }
 }

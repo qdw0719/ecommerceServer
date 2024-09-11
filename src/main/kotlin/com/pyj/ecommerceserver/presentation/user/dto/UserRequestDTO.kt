@@ -66,7 +66,7 @@ class UserRequestDTO {
     }
 
     data class ResetPassword(
-        val token: String,
+        val userEmail: String,
         val verificationCode: String,
         val newPassword: String = "1234"
     )
