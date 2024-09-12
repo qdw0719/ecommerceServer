@@ -44,9 +44,10 @@ class UserContoller(
     }
 
     @PostMapping("/auth/reset-password")
-    fun resetPassword(@RequestBody request: UserRequestDTO.ResetPassword): ResponseEntity<String> { //@RequestHeader("Authorization") token: String,
-        userFacade.resetPassword(request.userEmail, request.verificationCode, request.newPassword)
-        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.")
+    fun resetPassword(@RequestBody request: UserRequestDTO.ResetPassword): ResponseEntity<UserResponseDTO.ResetMessage> { //@RequestHeader("Authorization") token: String,
+        return ResponseEntity.ok(
+            UserResponseDTO.ResetMessage.toResponse(userFacade.resetPassword(request.userEmail, request.verificationCode, request.newPassword))
+        )
     }
 
     @PostMapping("/chage-password")

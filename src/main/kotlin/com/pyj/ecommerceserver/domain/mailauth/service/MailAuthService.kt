@@ -25,13 +25,18 @@ class MailAuthService(
         val userAuthInfo = mailAuthorizeRepository.findUserAuthInfo(command.userCode)
             ?.apply {
                 increaseSendCount()
-                verificationCode = command.verificationCode
+                newVerificationCode(command.verificationCode)
+                validate()
             }
             ?: MailAuthorize.create(command.userCode, command.verificationCode, 1)
         mailAuthorizeRepository.save(userAuthInfo)
     }
 
     fun findByUserAuthInfo(command: MailAuthCommand.UserAuthInfo): MailAuthorize? {
-        return mailAuthorizeRepository.findUserAuthInfo(command.userCode)
+        return mailAuthorizeRepository.findUserAuthInfoByValid(command.userCode)
+    }
+
+    fun getAllMailAuthorizeUsers(): List<MailAuthorize> {
+        return mailAuthorizeRepository.getAllMailAuthorizeUsers();
     }
 }

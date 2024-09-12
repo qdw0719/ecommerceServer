@@ -3,11 +3,13 @@ package com.pyj.ecommerceserver.domain.mailauth
 import com.pyj.ecommerceserver.domain.common.enums.ValidState
 import jakarta.persistence.*
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Entity
 data class MailAuthorize(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
+    @Column(unique = true, nullable = false)
     val userCode: String,
     var verificationCode: String,
     var sendCount: Int,
@@ -42,12 +44,6 @@ data class MailAuthorize(
         validState = ValidState.Invalid
     }
 
-    fun validation() {
-        if (validState == ValidState.Invalid) {
-            throw RuntimeException("유효한 인증번호가 아닙니다.")
-        }
-    }
-
     fun verificationCodeValidate(inputVerificationCode: String) {
         if (!verificationCode.equals(inputVerificationCode)) {
             throw RuntimeException("인증번호가 일치하지 않습니다.")
@@ -64,11 +60,12 @@ data class MailAuthorize(
         sendCount = sendCount + 1
     }
 
-    fun expiredVerfify() {
-        validState = ValidState.Invalid
-    }
-
     fun newVerificationCode(newVerificationCode: String) {
         verificationCode = newVerificationCode
+    }
+
+    fun isExpired(): Boolean {
+        val currentTime = LocalDateTime.now()
+        return ChronoUnit.MINUTES.between(updatedAt, currentTime) > 5
     }
 }
