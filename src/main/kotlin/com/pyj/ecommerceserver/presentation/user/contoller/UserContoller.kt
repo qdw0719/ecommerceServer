@@ -1,12 +1,10 @@
 package com.pyj.ecommerceserver.presentation.user.contoller
 
 import com.pyj.ecommerceserver.application.user.facade.UserFacade
-import com.pyj.ecommerceserver.domain.user.User
 import com.pyj.ecommerceserver.domain.user.service.UserService
 import com.pyj.ecommerceserver.presentation.user.dto.UserRequestDTO
 import com.pyj.ecommerceserver.presentation.user.dto.UserResponseDTO
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController @RequestMapping("/api/users")
@@ -22,10 +20,10 @@ class UserContoller(
         )
     }
 
-    @GetMapping("/login")
-    fun getCurrentUser(@AuthenticationPrincipal user: User): ResponseEntity<UserResponseDTO.UserLoginInfo> {
+    @PostMapping("/login")
+    fun getCurrentUser(@RequestBody request: UserRequestDTO.Login): ResponseEntity<UserResponseDTO.UserLoginInfo> {
         return ResponseEntity.ok(
-            UserResponseDTO.UserLoginInfo.toResponse(userFacade.login(user.userEmail, user.userPassword))
+            UserResponseDTO.UserLoginInfo.toResponse(userFacade.login(request.userEmail, request.userPassword))
         )
     }
 

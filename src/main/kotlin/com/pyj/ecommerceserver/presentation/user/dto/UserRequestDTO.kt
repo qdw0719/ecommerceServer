@@ -17,6 +17,11 @@ class UserRequestDTO {
         }
     }
 
+    data class Login (
+        val userEmail: String,
+        val userPassword: String
+    )
+
     data class UserInfo(
         val userCode: String
     ) {
